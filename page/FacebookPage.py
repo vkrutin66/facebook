@@ -28,7 +28,10 @@ class FacebookPage(Page):
 
     image_link = Locator("XPATH", "//a[contains(@class,'_4-eo _2t9n')]")
     image_div = Locator("CSS", ".stageWrapper")
-    image_overlay = Locator("CSS", "._3ixn")
+    image_close = Locator("XPATH", "//a[@class='_xlt _418x']")
+
+    stories_div = Locator("CSS", ".vertical-4pog")
+    story_div = Locator("XPATH", "//div[contains(@class,'size-small-48') and not(contains(@class, 'no-border'))]")
 
     def clean_monitor(self):
         if self.exists(self.black_monitor):
@@ -57,14 +60,22 @@ class FacebookPage(Page):
 
     def open_image(self):
         if self.exists(self.image_link):
+            print('Open Image')
             i = random.randrange(len(self.get_elements(self.image_link)))
             self.driver.execute_script("arguments[0].click();", self.get_elements(self.image_link)[i])
             time.sleep(1)
             for x in range(random.randrange(10)):
                 ActionChains(self.driver).move_to_element(self.get_element(self.image_div)).click().perform()
                 time.sleep(1)
-            self.get_element(self.image_overlay).click()
+            self.driver.execute_script("arguments[0].click();", self.get_element(self.image_close))
             time.sleep(1)
+
+    def watch_stories(self):
+        if self.exists(self.stories_div):
+            print('Watch stories')
+            self.get_element(self.story_div).click()
+            time.sleep(3)
+            self.wait(self.stories_div)
 
     def go_to_friends_page(self):
         if self.exists(self.go_to_friends_but):

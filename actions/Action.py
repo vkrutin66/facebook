@@ -53,6 +53,7 @@ class Actions:
         i = 0
         while i < 10:
             i = random.randrange(11)
+            #i = 8
             if i == 1:
                 self.add_random_friends()
             if i == 2:
@@ -65,8 +66,10 @@ class Actions:
                 self.like_random_posts()
             if i == 6:
                 self.go_to_random_friend()
-            #if i == 7:
-            #   self.open_image()
+            if i == 7:
+                self.open_image()
+            #if i == 8:
+            #    self.watch_stories()
 
         print('Finish Random Actions')
 
@@ -112,8 +115,10 @@ class Actions:
         time.sleep(1)
 
     def open_image(self):
-        print('Open Image')
         self.facebookPage.open_image()
+
+    def watch_stories(self):
+        self.facebookPage.watch_stories()
 
     def exit(self):
         print("Exit")
