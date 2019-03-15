@@ -74,8 +74,8 @@ class Actions:
                 self.open_image()
             if i == 8:
                 self.watch_stories()
-            #if i == 9:
-                #self.go_to_advertising_page()
+            # if i == 9:
+                # self.go_to_advertising_page()
             if i == 10:
                 self.go_to_link()
 

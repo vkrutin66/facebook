@@ -61,11 +61,12 @@ class FacebookPage(Page):
         ActionChains(self.driver).send_keys('Cool!!').send_keys(Keys.ENTER).perform()
 
     def like_random_posts(self):
-        for i in range(random.randrange(10)):
-            range_num = len(self.get_elements(self.like_buttons))
-            x = random.randrange(range_num)
-            time.sleep(1)
-            self.driver.execute_script("arguments[0].click();", self.get_elements(self.like_buttons)[x])
+        if self.exists(self.like_buttons):
+            for i in range(random.randrange(10)):
+                range_num = len(self.get_elements(self.like_buttons))
+                x = random.randrange(range_num)
+                time.sleep(1)
+                self.driver.execute_script("arguments[0].click();", self.get_elements(self.like_buttons)[x])
 
     def open_image(self):
         if self.exists(self.image_link):
@@ -80,7 +81,7 @@ class FacebookPage(Page):
             time.sleep(1)
 
     def watch_stories(self):
-        if self.exists(self.stories_div):
+        if self.exists(self.story_div):
             print('Watch stories')
             self.get_element(self.story_div).click()
             time.sleep(1)
@@ -107,7 +108,6 @@ class FacebookPage(Page):
     def go_to_link(self):
         if self.exists(self.go_to_link_loc):
             print("Go to link")
-            print(len(self.get_elements(self.go_to_link_loc)))
             i = random.randrange(len(self.get_elements(self.go_to_link_loc)))
             self.driver.execute_script("arguments[0].click();", self.get_elements(self.go_to_link_loc)[i])
             time.sleep(5)
