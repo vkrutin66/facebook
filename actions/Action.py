@@ -1,14 +1,13 @@
 import random
+import time
 
 from selenium import webdriver
-
 from page.FacebookPage import FacebookPage
 from page.AddFriendsPage import AddFriendsPage
 from page.LoginPage import LoginPage
 from page.UserFriendsPage import UserFriendsPage
 from page.UserPage import UserPage
-import time
-import pickle
+from pathlib import Path
 
 
 class Actions:
@@ -17,9 +16,13 @@ class Actions:
         if browser == "Firefox":
             self.driver = webdriver.Firefox(executable_path=r'drivers/geckodriver.exe')
         if browser == "Chrome":
-            self.driver = webdriver.Chrome('drivers/chromedriver.exe')
+            options = webdriver.ChromeOptions()
+            home = str(Path.home())
+            options.add_argument("user-data-dir=" + home + "/AppData/Local/Google/Chrome/User Data")
+            self.driver = webdriver.Chrome(executable_path="drivers/chromedriver.exe", chrome_options=options)
         print("Open browser ", browser)
         self.driver.maximize_window()
+
         self.loginPage = LoginPage(self.driver)
         self.facebookPage = FacebookPage(self.driver)
         self.addFriendsPage = AddFriendsPage(self.driver)
@@ -31,29 +34,30 @@ class Actions:
         self.driver.get(page_url)
 
     def login(self, user, password):
-        file = open("./cookies/cookies.pkl", "rb")
-        cookies = pickle.load(file)
-        file.close()
-        print("Get cookies")
-        for cookie in cookies:
-            self.driver.add_cookie(cookie)
-        time.sleep(1)
-        self.driver.refresh()
-        if self.loginPage.is_it_login_page():
-            print("Login")
-            self.loginPage.login(user, password)
-        file = open("./cookies/cookies.pkl", "wb")
-        pickle.dump(self.driver.get_cookies(), file)
-        file.close()
+        return
+        # if not self.loginPage.is_it_login_page():
+        #    file = open("./cookies/cookies.pkl", "rb")
+        #     cookies = pickle.load(file)
+        #     file.close()
+        #     print("Get cookies")
+        #     for cookie in cookies:
+        #         self.driver.add_cookie(cookie)
+        #     time.sleep(1)
+        #     self.driver.refresh()
+        #     if self.loginPage.is_it_login_page():
+        #         print("Login")
+        #         self.loginPage.login(user, password)
+        #     file = open("./cookies/cookies.pkl", "wb")
+        #     pickle.dump(self.driver.get_cookies(), file)
+        #     file.close()
 
     def random_actions(self):
         print('Start Random Actions')
         self.facebookPage.clean_monitor()
 
         i = 0
-        while i < 10:
-            i = random.randrange(11)
-            #i = 8
+        while i < 15:
+            i = random.randrange(16)
             if i == 1:
                 self.add_random_friends()
             if i == 2:
@@ -68,8 +72,12 @@ class Actions:
                 self.go_to_random_friend()
             if i == 7:
                 self.open_image()
-            #if i == 8:
-            #    self.watch_stories()
+            if i == 8:
+                self.watch_stories()
+            #if i == 9:
+                #self.go_to_advertising_page()
+            if i == 10:
+                self.go_to_link()
 
         print('Finish Random Actions')
 
@@ -119,6 +127,12 @@ class Actions:
 
     def watch_stories(self):
         self.facebookPage.watch_stories()
+
+    def go_to_advertising_page(self):
+        self.facebookPage.go_to_advertising_page()
+
+    def go_to_link(self):
+        self.facebookPage.go_to_link()
 
     def exit(self):
         print("Exit")
