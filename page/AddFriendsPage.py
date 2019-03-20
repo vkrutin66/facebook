@@ -12,6 +12,7 @@ class AddFriendsPage(Page):
     cancel_check = Locator("CSS", ".layerCancel")
 
     def add_random_friends(self):
+        time.sleep(1)
         for i in range(random.randrange(10)):
             if self.exists(self.add_friend_button):
                 self.driver.execute_script("arguments[0].click();", self.get_element(self.add_friend_button))

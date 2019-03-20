@@ -1,9 +1,10 @@
 import random
-import time
 
 from selenium import webdriver
 from page.FacebookPage import FacebookPage
 from page.AddFriendsPage import AddFriendsPage
+from page.GroupPage import GroupPage
+from page.ImagePage import ImagePage
 from page.LoginPage import LoginPage
 from page.UserFriendsPage import UserFriendsPage
 from page.UserPage import UserPage
@@ -26,15 +27,17 @@ class Actions:
         self.loginPage = LoginPage(self.driver)
         self.facebookPage = FacebookPage(self.driver)
         self.addFriendsPage = AddFriendsPage(self.driver)
-        self.user_page = UserPage(self.driver)
-        self.user_friends_page = UserFriendsPage(self.driver)
+        self.userPage = UserPage(self.driver)
+        self.userFriendsPage = UserFriendsPage(self.driver)
+        self.groupPage = GroupPage(self.driver)
+        self.imagePage = ImagePage(self.driver)
 
     def open_page(self, page_url):
         print("Open page ", page_url)
         self.driver.get(page_url)
 
     def login(self, user, password):
-        return
+        pass
         # if not self.loginPage.is_it_login_page():
         #    file = open("./cookies/cookies.pkl", "rb")
         #     cookies = pickle.load(file)
@@ -53,11 +56,11 @@ class Actions:
 
     def random_actions(self):
         print('Start Random Actions')
-        self.facebookPage.clean_monitor()
+        self.clean_monitor()
 
         i = 0
-        while i < 15:
-            i = random.randrange(16)
+        while i < 17:
+            i = random.randrange(19)
             if i == 1:
                 self.add_random_friends()
             if i == 2:
@@ -74,21 +77,33 @@ class Actions:
                 self.open_image()
             if i == 8:
                 self.watch_stories()
-            # if i == 9:
-                # self.go_to_advertising_page()
+            if i == 9:
+                self.random_scroll()
             if i == 10:
                 self.go_to_link()
+            if i == 11:
+                self.watch_notifications()
+            if i == 12:
+                self.watch_chats()
+            if i == 13:
+                self.add_post_in_group()
+            if i == 14:
+                self.check_group_inbox()
+            if i == 15:
+                self.check_group_notifications()
+            if i == 16:
+                self.like_group_post()
 
         print('Finish Random Actions')
+
+    def clean_monitor(self):
+        self.facebookPage.clean_monitor()
 
     def add_random_friends(self):
         if self.facebookPage.go_to_friends_page():
             print("Add random friends")
-            time.sleep(1)
             self.addFriendsPage.add_random_friends()
-            time.sleep(1)
             self.addFriendsPage.to_main()
-            time.sleep(1)
 
     def make_a_post(self):
         print("Make a post")
@@ -97,11 +112,8 @@ class Actions:
     def watch_user_page(self):
         print("Watch user page")
         self.facebookPage.go_to_user_page()
-        time.sleep(1)
-        self.user_page.scroll()
-        time.sleep(1)
-        self.user_page.to_main()
-        time.sleep(1)
+        self.userPage.scroll()
+        self.userPage.to_main()
 
     def add_comment(self):
         print("Add comment")
@@ -114,13 +126,9 @@ class Actions:
     def go_to_random_friend(self):
         print('Go to random friend')
         self.facebookPage.go_to_user_page()
-        time.sleep(1)
-        self.user_page.go_to_friends_page()
-        time.sleep(1)
-        self.user_friends_page.go_to_random_friend()
-        time.sleep(1)
-        self.user_friends_page.to_main()
-        time.sleep(1)
+        self.userPage.go_to_friends_page()
+        self.userFriendsPage.go_to_random_friend()
+        self.userFriendsPage.to_main()
 
     def open_image(self):
         self.facebookPage.open_image()
@@ -133,6 +141,43 @@ class Actions:
 
     def go_to_link(self):
         self.facebookPage.go_to_link()
+
+    def watch_notifications(self):
+        self.facebookPage.watch_notifications()
+
+    def watch_chats(self):
+        self.facebookPage.watch_chats()
+
+    def random_scroll(self):
+        print("Random scroll")
+        self.facebookPage.random_scroll()
+
+    def add_post_in_group(self):
+        self.facebookPage.go_to_image()
+        self.imagePage.download_image()
+        self.imagePage.to_facebook()
+        if self.facebookPage.go_to_group():
+            print("Post in group")
+            self.groupPage.post()
+            self.groupPage.to_main()
+
+    def check_group_inbox(self):
+        if self.facebookPage.go_to_group():
+            print("Check group income")
+            self.groupPage.check_group_inbox()
+            self.groupPage.to_main()
+
+    def check_group_notifications(self):
+        if self.facebookPage.go_to_group():
+            print("Check group notifications")
+            self.groupPage.check_group_notifications()
+            self.groupPage.to_main()
+
+    def like_group_post(self):
+        if self.facebookPage.go_to_group():
+            print("Like group posts")
+            self.groupPage.like_group_posts()
+            self.groupPage.to_main()
 
     def exit(self):
         print("Exit")

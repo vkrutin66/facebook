@@ -1,3 +1,6 @@
+import random
+import time
+
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -38,3 +41,4 @@ class Page:
 
     def to_main(self):
         self.get_element(self.logo).click()
+        time.sleep(1)

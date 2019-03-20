@@ -9,7 +9,7 @@ class Locator:
             'CSS': By.CSS_SELECTOR,
             'ID': By.ID,
             'NAME': By.NAME
-        }.get(by_name, "ID")
+        }.get(by_name, By.ID)
         self.locator_name = locator_name
 
     def get_by(self):

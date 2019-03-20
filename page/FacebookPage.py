@@ -22,6 +22,7 @@ class FacebookPage(Page):
     post_button = Locator("CSS", "._1mf")
     submit_post = Locator("CSS", "._6c0o button")
     post_overlay = Locator("CSS", "._3u15")
+    same_post_close = Locator("CSS", ".layerCancel")
 
     def get_posted_loc(self, text):
         return Locator("XPATH", "//p[contains(.,'" + text + "')]")
@@ -38,21 +39,46 @@ class FacebookPage(Page):
     story_div = Locator("XPATH", "//div[contains(@class,'size-small-48') and not(contains(@class, 'no-border'))]")
     close_story = Locator("XPATH", "//a[@class='_4-o9 _50-m _51an _5wx4 _2chv']")
 
+    watch_notifications_loc = Locator("XPATH", "//a[@name='notifications']")
+    notifications_loc = Locator("CSS", "._33c")
+    notifications_scroll = Locator("CSS", "._32hm")
+
+    watch_chats_loc = Locator("XPATH", "//a[@class='jewelButton _3eo8']")
+
+    logout_menu_loc = Locator("CSS", "#logoutMenu a")
+    group_link = Locator("XPATH", "//a[contains(@data-gt,'menu_pages')]")
+
     def clean_monitor(self):
         if self.exists(self.black_monitor):
             self.get_element(self.black_monitor).click()
 
     def make_a_post(self):
         time.sleep(1)
-        text = 'Post' + str(random.randrange(100000))
+        text = {
+            1: "What a great day",
+            2: "Really enjoying this weather lately",
+            3: "What are some of your favorite songs lately?",
+            4: "Anyone have great recommendations for great food",
+            5: "Looking for a new TV show to watch",
+            6: "Recommendations for top new movies to check out"
+        }.get(random.randrange(6), "What a great day")
         if self.exists(self.post_textarea):
             self.get_element(self.post_textarea).send_keys(text)
         else:
             self.get_element(self.post_button).click()
             ActionChains(self.driver).send_keys(text).perform()
         time.sleep(1)
-        self.get_element(self.submit_post).click()
+        self.driver.execute_script("arguments[0].click();", self.get_element(self.submit_post))
         self.wait(self.get_posted_loc(text))
+        time.sleep(1)
+        if self.exists(self.same_post_close):
+            self.driver.execute_script("arguments[0].click();", self.get_element(self.same_post_close))
+            time.sleep(1)
+
+    def random_scroll(self):
+        for i in range(random.randrange(10)):
+            self.driver.execute_script("window.scrollTo(0, " + str(random.randrange(10000)) + ");")
+            time.sleep(5)
 
     def add_comment(self):
         time.sleep(1)
@@ -83,12 +109,31 @@ class FacebookPage(Page):
     def watch_stories(self):
         if self.exists(self.story_div):
             print('Watch stories')
-            self.get_element(self.story_div).click()
+            self.driver.execute_script("arguments[0].click();", self.get_element(self.story_div))
             time.sleep(1)
             try:
                 self.wait_to_disappear(self.black_monitor)
             except TimeoutException:
                 self.driver.execute_script("arguments[0].click();", self.get_element(self.close_story))
+
+    def watch_notifications(self):
+        print('Watch notifications')
+        self.driver.execute_script("arguments[0].click();", self.get_element(self.watch_notifications_loc))
+        time.sleep(1)
+        i = random.randrange(len(self.get_elements(self.notifications_loc)))
+        self.get_elements(self.notifications_loc)[i].click()
+        time.sleep(2)
+        if self.exists(self.black_monitor):
+            self.driver.execute_script("arguments[0].click();", self.get_element(self.image_close))
+        else:
+            self.to_main()
+
+    def watch_chats(self):
+        print('Watch chats')
+        self.get_element(self.watch_chats_loc).click()
+        time.sleep(2)
+        self.get_element(self.watch_chats_loc).click()
+        time.sleep(1)
 
     def go_to_friends_page(self):
         if self.exists(self.go_to_friends_but):
@@ -99,6 +144,7 @@ class FacebookPage(Page):
 
     def go_to_user_page(self):
         self.get_element(self.go_to_user_but).click()
+        time.sleep(1)
 
     def go_to_advertising_page(self):
         if self.exists(self.go_to_advertising):
@@ -106,12 +152,30 @@ class FacebookPage(Page):
             time.sleep(10)
 
     def go_to_link(self):
+        for i in range(random.randrange(5)):
+            self.driver.execute_script("window.scrollTo(0, " + str(random.randrange(10000)) + ");")
+            time.sleep(2)
         if self.exists(self.go_to_link_loc):
             print("Go to link")
             i = random.randrange(len(self.get_elements(self.go_to_link_loc)))
             self.driver.execute_script("arguments[0].click();", self.get_elements(self.go_to_link_loc)[i])
             time.sleep(5)
             self.driver.switch_to.window(self.driver.window_handles[-1])
-            self.driver.close()
-            self.driver.switch_to.window(self.driver.window_handles[0])
+            if 'facebook' in self.driver.current_url:
+                self.driver.get("https://www.facebook.com/")
+            else:
+                self.driver.close()
+                self.driver.switch_to.window(self.driver.window_handles[0])
             time.sleep(2)
+
+    def go_to_group(self):
+        self.get_element(self.logout_menu_loc).click()
+        time.sleep(1)
+        if self.exists(self.group_link):
+            self.get_element(self.group_link).click()
+            time.sleep(2)
+            return True
+        return False
+
+    def go_to_image(self):
+        self.driver.get("https://pixabay.com/")
