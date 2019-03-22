@@ -60,7 +60,7 @@ class Actions:
 
         i = 0
         while i < 17:
-            i = random.randrange(19)
+            i = random.randrange(18)
             if i == 1:
                 self.add_random_friends()
             if i == 2:
