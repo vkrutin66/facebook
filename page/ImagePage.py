@@ -1,3 +1,4 @@
+import platform
 import random
 import requests
 
@@ -20,8 +21,12 @@ class ImagePage(Page):
         i = random.randrange(len(self.get_elements(self.image_link)))
         self.get_elements(self.image_link)[i].click()
         src = self.get_element(self.image).get_attribute('src')
-        with open("./image/image.jpg", "wb") as f:
-            f.write(requests.get(src).content)
+        if platform.system() == 'Windows':
+            with open("./image/image.jpg", "wb") as f:
+                f.write(requests.get(src).content)
+        else:
+            with open("/image/image.jpg", "wb") as f:
+                f.write(requests.get(src).content)
 
     def to_facebook(self):
         self.driver.get("https://www.facebook.com/")
