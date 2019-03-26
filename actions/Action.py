@@ -1,4 +1,5 @@
 import random
+import platform
 from threading import Timer
 
 from selenium import webdriver
@@ -20,7 +21,10 @@ class Actions:
             options = webdriver.ChromeOptions()
             home = str(Path.home())
             options.add_argument("user-data-dir=" + home + "/AppData/Local/Google/Chrome/User Data")
-            self.driver = webdriver.Chrome(executable_path="drivers/chromedriver.exe", chrome_options=options)
+            if platform.system() == 'Darwin':
+                self.driver = webdriver.Chrome(executable_path="drivers/chromedriver_mac", chrome_options=options)
+            else:
+                self.driver = webdriver.Chrome(executable_path="drivers/chromedriver.exe", chrome_options=options)
         print("Open browser ", browser)
         self.driver.maximize_window()
 
