@@ -1,3 +1,4 @@
+import os
 import platform
 import random
 import requests
@@ -25,7 +26,10 @@ class ImagePage(Page):
             with open("./image/image.jpg", "wb") as f:
                 f.write(requests.get(src).content)
         else:
-            with open("/image/image.jpg", "wb") as f:
+            my_path = os.path.abspath(os.path.dirname(__file__))
+            my_path = my_path.split("page", 1)[0]
+            path = os.path.join(my_path, "image/image.jpg")
+            with open(path, "wb") as f:
                 f.write(requests.get(src).content)
 
     def to_facebook(self):
