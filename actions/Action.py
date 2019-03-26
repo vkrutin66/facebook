@@ -50,7 +50,6 @@ class Actions:
         Timer(300.0, self.timer_over).start()
         while i < 16:
             i = random.randrange(15)
-            i = 12
             if self.end_of_test:
                 i = random.randrange(50)
             if i == 1:
