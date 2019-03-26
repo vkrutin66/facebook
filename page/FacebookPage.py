@@ -11,39 +11,36 @@ import random
 
 class FacebookPage(Page):
 
-    go_to_friends_but = Locator("XPATH", '//*[@id="pagelet_ego_pane"]/div[1]/div/div/div/div[1]/a')
+    go_to_friends_but = Locator("XPATH", "//a[contains(@href,'https://www.facebook.com/find-friends/')]")
     go_to_user_but = Locator("XPATH", "//*[@id='userNav']//a[contains(@href,'https://www.facebook.com/')]")
-    go_to_advertising = Locator("CSS", ".r_c4r-nm7cl a")
-    go_to_link_loc = Locator("CSS", "._6ks a")
+    go_to_link_loc = Locator("XPATH", "//a[contains(@href, 'http') and not(contains(@href, 'facebook'))]")
 
     black_monitor = Locator("CSS", "._3ixn")
 
     post_textarea = Locator("XPATH", "//textarea[contains(@class,'navigationFocus')]")
-    post_button = Locator("CSS", "._1mf")
-    submit_post = Locator("CSS", "._6c0o button")
-    post_overlay = Locator("CSS", "._3u15")
+    post_button = Locator("XPATH", "//div[@data-testid='status-attachment-mentions-input']")
+    submit_post = Locator("XPATH", "//button[@data-testid='react-composer-post-button']")
     same_post_close = Locator("CSS", ".layerCancel")
 
     def get_posted_loc(self, text):
         return Locator("XPATH", "//p[contains(.,'" + text + "')]")
 
-    comment_buttons = Locator("CSS", "._666h")
+    comment_buttons = Locator("XPATH", "//a[@testid='UFI2CommentLink']")
 
-    like_buttons = Locator("CSS", "._3l2t")
+    like_buttons = Locator("XPATH", "//a[@data-testid='UFI2ReactionLink']")
 
-    image_link = Locator("XPATH", "//a[contains(@class,'_4-eo _2t9n')]")
-    image_div = Locator("CSS", ".stageWrapper")
-    image_close = Locator("XPATH", "//a[@class='_xlt _418x']")
+    image_link = Locator("XPATH", "//a[@data-render-location='newsstand']")
+    image_div = Locator("XPATH", "//a[contains(@class,'snowliftPager next')]")
+    image_close = Locator("XPATH", "//div[@id='pagelet_photo_viewer_init']/../a[@role='button']")
 
     stories_div = Locator("CSS", ".vertical-4pog")
     story_div = Locator("XPATH", "//div[contains(@class,'size-small-48') and not(contains(@class, 'no-border'))]")
-    close_story = Locator("XPATH", "//a[@class='_4-o9 _50-m _51an _5wx4 _2chv']")
+    close_story = Locator("XPATH", "//div[@class='uiContextualLayerParent']/../a")
 
     watch_notifications_loc = Locator("XPATH", "//a[@name='notifications']")
-    notifications_loc = Locator("CSS", "._33c")
-    notifications_scroll = Locator("CSS", "._32hm")
+    notifications_loc = Locator("XPATH", "//a[@data-testid='notif_list_item_link']")
 
-    watch_chats_loc = Locator("XPATH", "//a[@class='jewelButton _3eo8']")
+    watch_chats_loc = Locator("XPATH", "//a[@name='mercurymessages']")
 
     logout_menu_loc = Locator("CSS", "#logoutMenu a")
     group_link = Locator("XPATH", "//a[contains(@data-gt,'menu_pages')]")
@@ -76,9 +73,8 @@ class FacebookPage(Page):
             time.sleep(1)
 
     def random_scroll(self):
-        for i in range(random.randrange(10)):
-            self.driver.execute_script("window.scrollTo(0, " + str(random.randrange(10000)) + ");")
-            time.sleep(5)
+        for i in range(random.randrange(5)):
+            self.scroll(random.randrange(10000))
 
     def add_comment(self):
         time.sleep(1)
@@ -146,15 +142,8 @@ class FacebookPage(Page):
         self.get_element(self.go_to_user_but).click()
         time.sleep(1)
 
-    def go_to_advertising_page(self):
-        if self.exists(self.go_to_advertising):
-            self.get_element(self.go_to_advertising).click()
-            time.sleep(10)
-
     def go_to_link(self):
-        for i in range(random.randrange(5)):
-            self.driver.execute_script("window.scrollTo(0, " + str(random.randrange(10000)) + ");")
-            time.sleep(2)
+        self.scroll(random.randrange(10000))
         if self.exists(self.go_to_link_loc):
             print("Go to link")
             i = random.randrange(len(self.get_elements(self.go_to_link_loc)))

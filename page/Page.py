@@ -1,4 +1,3 @@
-import random
 import time
 
 from selenium.common.exceptions import NoSuchElementException
@@ -38,6 +37,13 @@ class Page:
         except NoSuchElementException:
             return False
         return True
+
+    def scroll(self, length):
+        scrolled = 0
+        while scrolled < length:
+            scrolled += 10
+            self.driver.execute_script("window.scrollTo(0, " + str(scrolled) + ");")
+            time.sleep(0.075)
 
     def to_main(self):
         self.get_element(self.logo).click()

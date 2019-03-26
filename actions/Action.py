@@ -1,11 +1,11 @@
 import random
+from threading import Timer
 
 from selenium import webdriver
 from page.FacebookPage import FacebookPage
 from page.AddFriendsPage import AddFriendsPage
 from page.GroupPage import GroupPage
 from page.ImagePage import ImagePage
-from page.LoginPage import LoginPage
 from page.UserFriendsPage import UserFriendsPage
 from page.UserPage import UserPage
 from pathlib import Path
@@ -24,7 +24,6 @@ class Actions:
         print("Open browser ", browser)
         self.driver.maximize_window()
 
-        self.loginPage = LoginPage(self.driver)
         self.facebookPage = FacebookPage(self.driver)
         self.addFriendsPage = AddFriendsPage(self.driver)
         self.userPage = UserPage(self.driver)
@@ -32,69 +31,57 @@ class Actions:
         self.groupPage = GroupPage(self.driver)
         self.imagePage = ImagePage(self.driver)
 
+        self.end_of_test = False
+
     def open_page(self, page_url):
         print("Open page ", page_url)
         self.driver.get(page_url)
-
-    def login(self, user, password):
-        pass
-        # if not self.loginPage.is_it_login_page():
-        #    file = open("./cookies/cookies.pkl", "rb")
-        #     cookies = pickle.load(file)
-        #     file.close()
-        #     print("Get cookies")
-        #     for cookie in cookies:
-        #         self.driver.add_cookie(cookie)
-        #     time.sleep(1)
-        #     self.driver.refresh()
-        #     if self.loginPage.is_it_login_page():
-        #         print("Login")
-        #         self.loginPage.login(user, password)
-        #     file = open("./cookies/cookies.pkl", "wb")
-        #     pickle.dump(self.driver.get_cookies(), file)
-        #     file.close()
 
     def random_actions(self):
         print('Start Random Actions')
         self.clean_monitor()
 
         i = 0
-        while i < 17:
-            i = random.randrange(18)
+        Timer(300.0, self.timer_over).start()
+        while i < 16:
+            i = random.randrange(15)
+            if self.end_of_test:
+                i = random.randrange(50)
             if i == 1:
-                self.add_random_friends()
+                self.make_a_post()              # from video 2:55, from doc 1-7
             if i == 2:
-                self.make_a_post()
+                self.watch_user_page()          # from video 0.40, from doc 1-1
             if i == 3:
-                self.watch_user_page()
+                self.add_comment()              # from video 0.57
             if i == 4:
-                self.add_comment()
+                self.like_random_posts()        # from video 0.55
             if i == 5:
-                self.like_random_posts()
+                self.go_to_random_friend()      # from video 2:30, from doc 1-6
             if i == 6:
-                self.go_to_random_friend()
+                self.open_image()               # from video 1:05
             if i == 7:
-                self.open_image()
+                self.watch_stories()            # from video 3:15, from doc 1-8
             if i == 8:
-                self.watch_stories()
+                self.random_scroll()            # from video 1:20, from doc 1-2, 1-3
             if i == 9:
-                self.random_scroll()
+                self.go_to_link()               # from video 1:30, from doc 1-4
             if i == 10:
-                self.go_to_link()
+                self.watch_notifications()      # from video 3:40, from doc 1-10
             if i == 11:
-                self.watch_notifications()
+                self.watch_chats()              # from video 3:30, from doc 1-9
             if i == 12:
-                self.watch_chats()
+                self.add_post_in_group()        # from video 5:30, from doc 5, 6
             if i == 13:
-                self.add_post_in_group()
+                self.check_group_inbox()        # from video 4:40
             if i == 14:
-                self.check_group_inbox()
+                self.check_group_notifications()  # from video 4:45
             if i == 15:
-                self.check_group_notifications()
-            if i == 16:
-                self.like_group_post()
+                self.like_group_post()          # from video 4:38
 
         print('Finish Random Actions')
+
+    def timer_over(self):
+        self.end_of_test = True
 
     def clean_monitor(self):
         self.facebookPage.clean_monitor()
@@ -112,7 +99,7 @@ class Actions:
     def watch_user_page(self):
         print("Watch user page")
         self.facebookPage.go_to_user_page()
-        self.userPage.scroll()
+        self.userPage.scroll(random.randrange(10000))
         self.userPage.to_main()
 
     def add_comment(self):
@@ -135,9 +122,6 @@ class Actions:
 
     def watch_stories(self):
         self.facebookPage.watch_stories()
-
-    def go_to_advertising_page(self):
-        self.facebookPage.go_to_advertising_page()
 
     def go_to_link(self):
         self.facebookPage.go_to_link()

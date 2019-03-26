@@ -7,7 +7,7 @@ from page.Page import Page
 
 class UserFriendsPage(Page):
 
-    friends = Locator("CSS", "._698 a")
+    friends = Locator("XPATH", "//div[@data-testid='friend_list_item']/a")
 
     def go_to_random_friend(self):
         time.sleep(1)

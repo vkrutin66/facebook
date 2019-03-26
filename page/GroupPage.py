@@ -18,14 +18,11 @@ class GroupPage(Page):
     add_image = Locator("XPATH", "//input[@type='file']")
     cancel_button = Locator("CSS", ".layerCancel")
 
-    inbox_messages = Locator("XPATH", "//li[@itemcontentclass='_6z9v'][2]")
+    inbox_messages = Locator("XPATH", "//a[contains(@href,'messages') and @role='tab'] ")
 
-    notifications_loc = Locator("XPATH", "//li[@itemcontentclass='_6z9v'][3]")
+    notifications_loc = Locator("XPATH", "//a[contains(@href,'notifications') and @role='tab'] ")
 
     like_buttons = Locator("XPATH", "//a[@data-testid='fb-ufi-likelink']")
-
-    def get_posted_loc(self, text):
-        return Locator("XPATH", "//p[contains(.,'" + text + "')]")
 
     def post(self):
         self.wait(self.input_field)
@@ -64,13 +61,9 @@ class GroupPage(Page):
         time.sleep(3)
 
     def like_group_posts(self):
-        for i in range(random.randrange(5)):
-            self.driver.execute_script("window.scrollTo(0, " + str(random.randrange(10000)) + ");")
-            time.sleep(2)
+        self.scroll(random.randrange(10000))
         if self.exists(self.like_buttons):
             for i in range(random.randrange(5)):
                 range_num = len(self.get_elements(self.like_buttons))
                 x = random.randrange(range_num)
-                self.driver.execute_script("window.scrollTo(0, " + str(random.randrange(10000)) + ");")
-                time.sleep(1)
                 self.driver.execute_script("arguments[0].click();", self.get_elements(self.like_buttons)[x])

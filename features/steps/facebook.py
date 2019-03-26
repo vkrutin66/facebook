@@ -9,11 +9,6 @@ def step(context, url):
     context.actions.open_page(url)
 
 
-@then('login as "{username}" password "{password}"')
-def step(context, username, password):
-    context.actions.login(username, password)
-
-
 @then('make random actions')
 def step(context):
     context.actions.random_actions()
