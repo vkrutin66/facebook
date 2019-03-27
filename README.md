@@ -5,4 +5,4 @@ run: run.sh
 2. Install behave: in command line "sudo pip install behave" 
 3. Install selenium: in command line "sudo pip install selenium"   
 4. Install requests: in command line "sudo pip install requests"  
-5. Run run.sh: if you on mac os then in command line "sh run.sh", if you on windows then double click on run.sh  
+5. Run run.sh: if you on mac os then in command line "sh run.sh", if you on windows then you need to install GIT, then double click on run.sh  
