@@ -5,7 +5,7 @@ from actions.Action import Actions
 
 @given('website "{url}"')
 def step(context, url):
-    context.actions = Actions("Chrome")
+    context.actions = Actions()
     context.actions.open_page(url)
 
 

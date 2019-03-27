@@ -20,7 +20,7 @@ class ImagePage(Page):
         self.get_element(self.input_field).send_keys("Sunny Fitness")
         self.get_element(self.input_field).send_keys(Keys.ENTER)
         i = random.randrange(len(self.get_elements(self.image_link)))
-        self.get_elements(self.image_link)[i].click()
+        self.driver.execute_script("arguments[0].click();", self.get_elements(self.image_link)[i])
         src = self.get_element(self.image).get_attribute('src')
         if platform.system() == 'Windows':
             with open("./image/image.jpg", "wb") as f:

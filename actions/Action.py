@@ -1,33 +1,20 @@
+
 import random
-import platform
 from threading import Timer
 
-from selenium import webdriver
+from actions.BaseAction import BaseAction
 from page.FacebookPage import FacebookPage
 from page.AddFriendsPage import AddFriendsPage
 from page.GroupPage import GroupPage
 from page.ImagePage import ImagePage
 from page.UserFriendsPage import UserFriendsPage
 from page.UserPage import UserPage
-from pathlib import Path
 
 
-class Actions:
+class Actions(BaseAction):
 
-    def __init__(self, browser):
-        if browser == "Firefox":
-            self.driver = webdriver.Firefox(executable_path=r'drivers/geckodriver.exe')
-        if browser == "Chrome":
-            options = webdriver.ChromeOptions()
-            home = str(Path.home())
-            options.add_argument("user-data-dir=" + home + "/AppData/Local/Google/Chrome/User Data")
-            if platform.system() == 'Windows':
-                self.driver = webdriver.Chrome(executable_path="drivers/chromedriver.exe", chrome_options=options)
-            else:
-                self.driver = webdriver.Chrome(executable_path="drivers/chromedriver_mac", chrome_options=options)
-
-        print("Open browser ", browser)
-        self.driver.maximize_window()
+    def __init__(self):
+        super().__init__()
 
         self.facebookPage = FacebookPage(self.driver)
         self.addFriendsPage = AddFriendsPage(self.driver)
@@ -48,9 +35,8 @@ class Actions:
 
         i = 0
         Timer(300.0, self.timer_over).start()
-        while i < 16:
-            i = random.randrange(15)
-
+        while i < 17:
+            i = random.randrange(16)
             if self.end_of_test:
                 i = random.randrange(50)
             if i == 1:
