@@ -11,6 +11,8 @@ import random
 
 class FacebookPage(Page):
 
+    logout_page_menu = Locator("CSS", ".loggedout_menubar")
+
     go_to_friends_but = Locator("XPATH", "//a[contains(@href,'https://www.facebook.com/find-friends/')]")
     go_to_user_but = Locator("XPATH", "//*[@id='userNav']//a[contains(@href,'https://www.facebook.com/')]")
     go_to_link_loc = Locator("XPATH", "//a[contains(@href, 'http') and not(contains(@href, 'facebook'))]")
@@ -44,6 +46,9 @@ class FacebookPage(Page):
 
     logout_menu_loc = Locator("CSS", "#logoutMenu a")
     group_link = Locator("XPATH", "//a[contains(@data-gt,'menu_pages')]")
+
+    def is_login_page(self):
+        return self.exists(self.logout_page_menu)
 
     def clean_monitor(self):
         if self.exists(self.black_monitor):

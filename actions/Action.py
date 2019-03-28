@@ -30,6 +30,10 @@ class Actions(BaseAction):
         self.driver.get(page_url)
 
     def random_actions(self):
+
+        if self.facebookPage.is_login_page():
+            return
+
         print('Start Random Actions')
         self.clean_monitor()
 
